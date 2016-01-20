@@ -18,10 +18,12 @@ object Parser04 extends JavaTokenParsers {
     case a ~ "/" ~ b ⇒ Div  (a, b)
   }
 
-  val expr: Parser[Expr] = (term | number) ~ ("+" | "-") ~ (expr | term | number) ^^ {
+  val sum: Parser[Expr] = (term | number) ~ ("+" | "-") ~ (sum | term | number) ^^ {
     case a ~ "+" ~ b ⇒ Plus (a, b)
     case a ~ "-" ~ b ⇒ Minus(a, b)
   }
+
+  val expr = sum | term | number
 
   def apply(input: String) = parseAll(expr, input)
 
